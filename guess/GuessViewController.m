@@ -17,11 +17,19 @@
 UIButton *answerButton[4];
 NSString *answer = @"锦上添花";
 NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添美发的要吉";
+//NSMutableArray *temp=nil;
+//NSMutableDictionary *findPosition;
+
+
+
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.findPosition=[NSMutableDictionary dictionaryWithCapacity:50];
     
     for (int row = 0; row < 3; row++) {
         for (int col = 0; col < 8; col++) {
@@ -35,6 +43,9 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
             [button setTitle:title forState: UIControlStateNormal];
             button.backgroundColor = [UIColor clearColor];
             button.tag = 2000+i;
+            
+            [self.findPosition setObject:button forKey:button.currentTitle];
+            
             [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:button];
         }
@@ -47,15 +58,18 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
         answerButton[i] = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         answerButton[i].frame = frame;
         [answerButton[i] setTitle:@"" forState: UIControlStateNormal];
-        answerButton[i].backgroundColor = [UIColor clearColor];
+        answerButton[i].backgroundColor = [UIColor blueColor];
         answerButton[i].tag = 3000+i;
         [answerButton[i] addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:answerButton[i]];	
     }
     
     CGRect frame = CGRectMake(200, 80, 500, 500);
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
+    
+    imageView = [[UIImageView alloc] initWithFrame:frame];
+   // imageViewTemp=imageView;
     imageView.image = [UIImage imageNamed:@"question1"];
+    
     [self.view addSubview:imageView];
 
 }
@@ -67,13 +81,51 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
         // from choices box
         for (int i = 0; i < 4; i++) {
             if ([[answerButton[i] currentTitle] isEqualToString:@""]) {
-                [answerButton[i] setTitle:[btn currentTitle] forState:UIControlStateNormal];
+               [answerButton[i] setTitle:[btn currentTitle] forState:UIControlStateNormal];
+                
+                
+                [btn setTitle:@"" forState:UIControlStateNormal];
+              
+                
+                [btn removeFromSuperview];
+                
                 break;
             }
         }
     } else if (btn.tag >= 3000) {
         // from answer box
-        [btn setTitle:@"" forState:UIControlStateNormal];
+        if (![[btn currentTitle] isEqualToString:@""]) {
+            int index=0;
+            UIButton *buttontemp=[self.findPosition objectForKey:btn.currentTitle];
+           index=buttontemp.tag-2000;
+            
+            //[super viewDidLoad];
+            
+         //   index=[[findPosition objectForKey:btn.currentTitle] tag] -2000;
+            
+            int x=(index%8)*80+70;
+            int y=(index/8)*80+700;
+           
+            CGRect frame = CGRectMake(x, y, 70, 70);
+            UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            button1.frame = frame;
+        //    NSString *title = [NSString stringWithFormat:@"%@", btn.currentTitle];
+         //   NSLog(@"%@",btn.currentTitle);
+            [button1 setTitle:btn.currentTitle forState: UIControlStateNormal];
+         //   NSLog(@"%@",button1.currentTitle);
+            
+            button1.backgroundColor = [UIColor clearColor];
+            button1.tag = 2000+index;
+             
+            [button1 addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:button1];
+            
+            [btn setTitle:@"" forState:UIControlStateNormal];
+
+            
+        }
+        
+        
     } else {
 
     }
@@ -91,6 +143,23 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
         NSString *msg;
         if ([ans isEqualToString:answer]) {
             msg = @"运气不错，答对了！";
+            NSLog(@"%@",answerButton[0].currentTitle);
+
+          //  CGRect frame = CGRectMake(200, 80, 500, 500);
+
+         //  UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
+            imageView.image = [UIImage imageNamed:@"question2"];
+            [self.view addSubview:imageView];   
+           // imageViewTemp.image=[UIImage imageNamed:@"question2"];
+            NSLog(@"%@",answerButton[1].currentTitle);
+            NSLog(@"qqqq");
+
+            int i;
+            for (i=0; i<4; i++) {
+                [answerButton[i] setTitle:@"" forState:UIControlStateNormal];
+                NSLog(@"%@",answerButton[i].currentTitle);
+            }
+            
         } else {
             msg = @"人品不行，继续努力";
         }

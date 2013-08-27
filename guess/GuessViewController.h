@@ -7,6 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface GuessViewController : UIViewController
+@interface GuessViewController : UIViewController{
+UIImageView *imageView ;
+//NSMutableDictionary *findPosition;
+}
+@property (nonatomic,strong) NSMutableDictionary *findPosition;
 @end
