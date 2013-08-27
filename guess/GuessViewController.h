@@ -13,5 +13,6 @@
 UIImageView *imageView ;
 //NSMutableDictionary *findPosition;
 }
-@property (nonatomic,strong) NSMutableDictionary *findPosition;
+@property (nonatomic,strong) NSMutableArray *findPosition;
+//@property (nonatomic,strong) NSMutableDictionary *findPosition;
 @end

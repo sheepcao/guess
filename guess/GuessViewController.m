@@ -15,8 +15,11 @@
 @implementation GuessViewController
 
 UIButton *answerButton[4];
+int answerButtonTag[4]={0};
+int choicesTag[4]={0};
 NSString *answer = @"锦上添花";
 NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添美发的要吉";
+NSString *choices1 = @"锦是句成语是在上再绣花比喻好利佳加好添美发的要吉";
 //NSMutableArray *temp=nil;
 //NSMutableDictionary *findPosition;
 
@@ -29,7 +32,9 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.findPosition=[NSMutableDictionary dictionaryWithCapacity:50];
+ //   self.findPosition=[NSMutableDictionary dictionaryWithCapacity:50];
+    
+    self.findPosition=[NSMutableArray arrayWithCapacity:25];
     
     for (int row = 0; row < 3; row++) {
         for (int col = 0; col < 8; col++) {
@@ -44,7 +49,9 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
             button.backgroundColor = [UIColor clearColor];
             button.tag = 2000+i;
             
-            [self.findPosition setObject:button forKey:button.currentTitle];
+            NSLog(@"tag of %@ is %d",button.currentTitle,button.tag);
+            
+            [self.findPosition addObject:button.currentTitle];
             
             [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:button];
@@ -82,7 +89,9 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
         for (int i = 0; i < 4; i++) {
             if ([[answerButton[i] currentTitle] isEqualToString:@""]) {
                [answerButton[i] setTitle:[btn currentTitle] forState:UIControlStateNormal];
-                
+               
+                choicesTag[i]=btn.tag-2000;
+                answerButtonTag[i]=answerButton[i].tag;
                 
                 [btn setTitle:@"" forState:UIControlStateNormal];
               
@@ -95,17 +104,17 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
     } else if (btn.tag >= 3000) {
         // from answer box
         if (![[btn currentTitle] isEqualToString:@""]) {
+ 
             int index=0;
-            UIButton *buttontemp=[self.findPosition objectForKey:btn.currentTitle];
-           index=buttontemp.tag-2000;
+            for (int i=0; i<4; i++) {
+               if( answerButtonTag[i]==btn.tag)
+               {
+                   index=choicesTag[i];
+               
             
-            //[super viewDidLoad];
-            
-         //   index=[[findPosition objectForKey:btn.currentTitle] tag] -2000;
-            
-            int x=(index%8)*80+70;
-            int y=(index/8)*80+700;
-           
+                    int x=(index%8)*80+70;
+                    int y=(index/8)*80+700;
+                    
             CGRect frame = CGRectMake(x, y, 70, 70);
             UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
             button1.frame = frame;
@@ -115,16 +124,19 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
          //   NSLog(@"%@",button1.currentTitle);
             
             button1.backgroundColor = [UIColor clearColor];
-            button1.tag = 2000+index;
+            button1.tag = 2000+choicesTag[i];
              
             [button1 addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
             [self.view addSubview:button1];
-            
-            [btn setTitle:@"" forState:UIControlStateNormal];
-
-            
+                
+                [btn setTitle:@"" forState:UIControlStateNormal];
+               }
+           
+            }
+                       
         }
         
+                
         
     } else {
 
@@ -151,14 +163,37 @@ NSString *choices = @"锦是句成语是在上再绣花比喻好利佳加好添�
             imageView.image = [UIImage imageNamed:@"question2"];
             [self.view addSubview:imageView];   
            // imageViewTemp.image=[UIImage imageNamed:@"question2"];
-            NSLog(@"%@",answerButton[1].currentTitle);
-            NSLog(@"qqqq");
+  //          NSLog(@"%@",answerButton[1].currentTitle);
+  //          NSLog(@"qqqq");
 
             int i;
             for (i=0; i<4; i++) {
-                [answerButton[i] setTitle:@"" forState:UIControlStateNormal];
-                NSLog(@"%@",answerButton[i].currentTitle);
+              
+                
+                int x=(choicesTag[i]%8)*80+70;
+                int y=(choicesTag[i]/8)*80+700;
+                
+                CGRect frame = CGRectMake(x, y, 70, 70);
+                UIButton *button1 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                button1.frame = frame;
+                [button1 setTitle:answerButton[i].currentTitle forState: UIControlStateNormal];
+                //   NSLog(@"%@",button1.currentTitle);
+                
+                button1.backgroundColor = [UIColor clearColor];
+                button1.tag = 2000+choicesTag[i];
+                
+                [button1 addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+                [self.view addSubview:button1];
+                
+                  [answerButton[i] setTitle:@"" forState:UIControlStateNormal];
+
+
+      //          NSLog(@"%@",answerButton[i].currentTitle);
             }
+            
+            
+            
+         
             
         } else {
             msg = @"人品不行，继续努力";
