@@ -10,9 +10,9 @@
 #import <Foundation/Foundation.h>
 
 @interface GuessViewController : UIViewController{
-UIImageView *imageView ;
-//NSMutableDictionary *findPosition;
+    UIImageView *imageView ;
+    UIButton *choiceButtons[24];
+    UIButton *answerButton[4];
 }
-@property (nonatomic,strong) NSMutableArray *findPosition;
-//@property (nonatomic,strong) NSMutableDictionary *findPosition;
+
 @end
